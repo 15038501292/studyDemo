@@ -132,6 +132,7 @@ public class UserController {
         }
         // 密码进行AES解密
         String key = AesCipherUtil.deCrypto(userDtoTemp.getPassword());
+        System.out.println(key);
         // 因为密码加密是以帐号+密码的形式进行加密的，所以解密后的对比是帐号+密码
         if (key.equals(userDto.getAccount() + userDto.getPassword())) {
             // 清除可能存在的Shiro权限信息缓存
