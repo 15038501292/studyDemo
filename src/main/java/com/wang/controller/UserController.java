@@ -307,6 +307,17 @@ public class UserController {
         return new ResponseBean(HttpStatus.OK.value(), "删除成功(Delete Success)", null);
     }
 
+    @GetMapping("/getInfoByAcc")
+    @RequiresPermissions(logical = Logical.AND,value = {"user:view"})
+    public ResponseBean getInfoByAcc(){
+
+
+
+        return new ResponseBean(HttpStatus.OK.value(),"查询成功",null);
+    }
+
+
+
     /**
      * 剔除在线用户
      * @param id
