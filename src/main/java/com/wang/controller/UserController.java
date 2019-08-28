@@ -28,6 +28,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
@@ -132,7 +133,6 @@ public class UserController {
         }
         // 密码进行AES解密
         String key = AesCipherUtil.deCrypto(userDtoTemp.getPassword());
-        System.out.println(key);
         // 因为密码加密是以帐号+密码的形式进行加密的，所以解密后的对比是帐号+密码
         if (key.equals(userDto.getAccount() + userDto.getPassword())) {
             // 清除可能存在的Shiro权限信息缓存
@@ -144,6 +144,9 @@ public class UserController {
             JedisUtil.setObject(Constant.PREFIX_SHIRO_REFRESH_TOKEN + userDto.getAccount(), currentTimeMillis, Integer.parseInt(refreshTokenExpireTime));
             // 从Header中Authorization返回AccessToken，时间戳为当前时间戳
             String token = JwtUtil.sign(userDto.getAccount(), currentTimeMillis);
+//            Cookie cookieToken = new Cookie("token", token);
+//            cookieToken.setMaxAge(Integer.parseInt(refreshTokenExpireTime));
+//            httpServletResponse.addCookie(cookieToken);
             httpServletResponse.setHeader("Authorization", token);
             httpServletResponse.setHeader("Access-Control-Expose-Headers", "Authorization");
             return new ResponseBean(HttpStatus.OK.value(), "登录成功(Login Success.)", null);
